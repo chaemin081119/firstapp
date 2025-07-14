@@ -9,7 +9,7 @@ st.title("🗺️ 미국 주별 흑인 인구 비율 (2020)")
 
 # JSON 로드
 try:
-    with open("us_states_black_population.json", "r") as f:
+    with open("us-states.json", "r") as f:
         geojson_data = json.load(f)
 except Exception as e:
     st.error("❌ JSON 파일을 불러오는 데 실패했습니다.")
