@@ -13,7 +13,7 @@ st.write("이 지도는 Folium을 사용하여 각 주별 흑인 인구 비율�
 m = folium.Map(location=[37.8, -96], zoom_start=4)
 
 # GeoJSON 로드
-with open("us_states.json", "r") as f:
+with open("us-states.json", "r") as f:
     data = json.load(f)
 
 # Choropleth 레이어 추가
