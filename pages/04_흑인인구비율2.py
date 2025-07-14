@@ -1,27 +1,40 @@
 import streamlit as st
 import folium
-from streamlit_folium import st_folium
 import json
+import pandas as pd
+from streamlit_folium import st_folium
 
-# Streamlit 설정
-st.set_page_config(page_title="미국 흑인 인구 지도", page_icon="🗺️")
-st.title("🗺️ 미국 주별 흑인 인구 비율 지도")
+st.set_page_config(page_title="미국 흑인 인구 비율 지도", page_icon="🗺️")
+st.title("🗺️ 미국 주별 흑인 인구 비율 (2020)")
 
-st.write("이 지도는 Folium을 사용하여 각 주별 흑인 인구 비율을 시각화합니다.")
+# JSON 로드
+try:
+    with open("us_states_black_population.json", "r") as f:
+        geojson_data = json.load(f)
+except Exception as e:
+    st.error("❌ JSON 파일을 불러오는 데 실패했습니다.")
+    st.exception(e)
+    st.stop()
 
-# 미국 중심 좌표
+# JSON에서 데이터 추출
+data_list = []
+for feature in geojson_data["features"]:
+    state = feature["properties"]["name"]
+    black_pct = feature["properties"]["black_pct"]
+    data_list.append({"State": state, "Black Population %": black_pct})
+
+# pandas DataFrame 생성
+df = pd.DataFrame(data_list)
+
+# 지도 생성
 m = folium.Map(location=[37.8, -96], zoom_start=4)
 
-# GeoJSON 로드
-with open("us-states.json", "r") as f:
-    data = json.load(f)
-
-# Choropleth 레이어 추가
+# Choropleth 추가
 folium.Choropleth(
-    geo_data=data,
+    geo_data=geojson_data,
     name="choropleth",
-    data=data,
-    columns=["properties.name", "properties.black_pct"],
+    data=df,
+    columns=["State", "Black Population %"],
     key_on="feature.properties.name",
     fill_color="YlGnBu",
     fill_opacity=0.7,
@@ -30,9 +43,15 @@ folium.Choropleth(
 ).add_to(m)
 
 # Tooltip 추가
-folium.GeoJsonTooltip(fields=["name", "black_pct"],
-                      aliases=["주", "흑인 인구 비율 (%)"],
-                      sticky=False).add_to(folium.GeoJson(data).add_to(m))
+folium.GeoJson(
+    geojson_data,
+    name="주 정보",
+    tooltip=folium.GeoJsonTooltip(
+        fields=["name", "black_pct"],
+        aliases=["주", "흑인 인구 비율 (%)"],
+        localize=True
+    )
+).add_to(m)
 
-# 지도 표시
+# Streamlit에 지도 표시
 st_folium(m, width=800, height=600)
