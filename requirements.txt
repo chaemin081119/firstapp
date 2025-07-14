@@ -3,4 +3,3 @@ yfinance
 folium
 streamlit-folium
 pandas
-pip install kagglehub
