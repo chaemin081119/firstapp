@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Alabama",
+        "black_pct": 26.8
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-88.473227, 30.223334],
+          [-88.246073, 30.176552],
+          ...
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Georgia",
+        "black_pct": 31.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-85.605165, 34.984749],
+          ...
+        ]]
+      }
+    }
+    // 나머지 주 계속...
+  ]
+}
