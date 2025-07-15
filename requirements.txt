@@ -1,5 +1,7 @@
-plotly
-yfinance
+streamlit
 folium
 streamlit-folium
+pycountry
+requests
 pandas
+plotly
